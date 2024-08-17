@@ -48,7 +48,7 @@ const SignupForm: React.FC = () => {
     if (!validate()) {return;}
 
     try {
-      const response = await fetch('http://localhost:3000/api/user/signUp', {
+      const response = await fetch('http://localhost:3018/api/user/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

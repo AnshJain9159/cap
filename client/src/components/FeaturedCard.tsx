@@ -19,14 +19,14 @@ const Card: React.FC<CardProps> = ({ imageUrl, name, mode, date, teamSize,hackUR
         </div>
         <div className="flex flex-col justify-between w-full md:w-1/2 p-4 space-y-2 md:space-y-2">
           
-            <div className="text-lg md:text-2xl"><strong>Name:</strong> {name}</div>
-            <div className="text-lg md:text-2xl"><strong>Mode:</strong> {mode}</div>
-            <div className="text-lg md:text-2xl"><strong>Hosted on:</strong> {date}</div>
-            <div className="text-lg md:text-2xl"><strong>Team Size:</strong> {teamSize}</div>
+            <div className="text-lg md:text-2xl flex"><strong>Name:{" "}</strong><p className='text-white'>{name}</p></div>
+            <div className="text-lg md:text-2xl flex"><strong>Mode:{" "}</strong> <p className='text-white'>{mode}</p></div>
+            <div className="text-lg md:text-2xl flex"><strong>Last Date:{" "}</strong><p className='text-white'> {date}</p></div>
+            <div className="text-lg md:text-2xl flex"><strong>Team Size:{" "}</strong><p className='text-white'>{teamSize}</p></div>
           
           </div>
           <div className="flex items-center justify-center pr-2 md:justify-start">
-            <a href={`${hackURL}`} target='_blank' title="Visit the hackathon website">
+            <a href={hackURL} target='_blank' title="Visit the hackathon website">
               <Button  variant={'outline'} className="bg-yellow-500 text-black p-2 rounded-full">
                 <Link />
               </Button>

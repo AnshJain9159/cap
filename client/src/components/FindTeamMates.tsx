@@ -46,7 +46,7 @@ const FindTeamMates: React.FC = () => {
     // Fetch default profiles when the component mounts
     const fetchDefaultProfiles = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/user/findUsers", {
+        const response = await fetch("http://localhost:3018/api/user/findUsers", {
           credentials: "include",
         });
         if (response.ok) {
@@ -90,7 +90,7 @@ const FindTeamMates: React.FC = () => {
   const handleSearch = async () => {
     try {
       const params = value || filterCount > 0 ? new URLSearchParams({ Text: value, ...selectedFilters }).toString() : '';
-      const url = `http://localhost:3000/api/user/findUsers?${params}`;
+      const url = `http://localhost:3018/api/user/findUsers?${params}`;
       const response = await fetch(url, {
         credentials: "include",
       });

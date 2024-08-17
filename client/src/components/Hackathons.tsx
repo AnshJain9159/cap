@@ -19,7 +19,7 @@ function Hackathons() {
     // Fetch default profiles when the component mounts
     const fetchDefaultProfiles = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/events/getAllEvents", {
+        const response = await fetch("http://localhost:3018/api/events/getAllEvents", {
           credentials: "include",
         });
         if (response.ok) {
@@ -38,7 +38,7 @@ function Hackathons() {
   }, []);
 
   return (
-    <div className='bg-black min-h-screen px-auto py-16'>
+    <div className='bg-black flex justify-center flex-col items-center min-h-screen  px-auto py-16'>
       {/* Move the heading to the top */}
       <div className='text-center mb-8'>
         <h1 className='text-white font-bold text-5xl'>HACKATHON ALERTS</h1>
@@ -95,7 +95,7 @@ function Hackathons() {
             mode={card.Mode}
             date={card.lastDate}
             teamSize={card.teamSize}
-            hackURL={card.hackURL} 
+            hackURL={card.URI} 
           />
         ))}
       </div>

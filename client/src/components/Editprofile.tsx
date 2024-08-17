@@ -56,7 +56,7 @@ function EditProfile() {
 
   function getCookieValue(name: string) {
     const cookies = document.cookie.split('; ');
-    for (let cookie of cookies) {
+    for (const cookie of cookies) {
       const [cookieName, cookieValue] = cookie.split('=');
       if (cookieName === name) {
         return decodeURIComponent(cookieValue);
@@ -67,7 +67,7 @@ function EditProfile() {
 
   useEffect(() => {
     const username = getCookieValue('user');
-    fetch(`http://localhost:3000/api/user/getProfile/${username}`, {
+    fetch(`http://localhost:3018/api/user/getProfile/${username}`, {
       credentials: 'include',
     })
       .then((response) => response.json())
@@ -182,7 +182,7 @@ function EditProfile() {
     console.log(userData);
 
     if (validate()) {
-      fetch(`http://localhost:3000/api/user/editProfile/${formData.username}`, {
+      fetch(`http://localhost:3018/api/user/editProfile/${formData.username}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -226,6 +226,7 @@ function EditProfile() {
           </Avatar>
          
           <input
+            aria-label='avatar'
             id="avatarInput"
             type="file"
             className="hidden"
@@ -384,6 +385,7 @@ function EditProfile() {
                 {formData.skills.map((skill, index) => (
                   <div key={index} className="flex items-center mb-2">
                     <input
+                    aria-label='skills'
                       type="text"
                       value={skill}
                       onChange={(e) => handleSkillChange(e, index)}

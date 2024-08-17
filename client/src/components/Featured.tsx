@@ -17,7 +17,7 @@ function Featured() {
     // Fetch default profiles when the component mounts
     const fetchDefaultProfiles = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/events/getAllEvents", {
+        const response = await fetch("http://localhost:3018/api/events/getAllEvents", {
           credentials: "include",
         });
         if (response.ok) {
