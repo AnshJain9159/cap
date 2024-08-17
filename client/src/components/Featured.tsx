@@ -9,32 +9,48 @@ import {
 import FeaturedCard from './FeaturedCard'
 import { Button } from './ui/button'
 
+
+interface CardData {
+  id: string;
+  Image: string;
+  Name: string;
+  Mode: string;
+  lastDate: string;
+  teamSize: number;
+  URI: string;
+}
+
 function Featured() {
 
-  const  [cardsData,setCardsData] = useState([]);
+  const [cardsData, setCardsData] = useState<CardData[]>([]);
 
   useEffect(() => {
-    // Fetch default profiles when the component mounts
     const fetchDefaultProfiles = async () => {
       try {
         const response = await fetch("http://localhost:3018/api/events/getAllEvents", {
           credentials: "include",
         });
         if (response.ok) {
-          const data = await response.json();
-          setCardsData(data);
-          console.log(cardsData);            
+          const data: CardData[] = await response.json();
+          const formattedData = data.map(card => ({
+            ...card,
+            lastDate: new Date(card.lastDate).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })
+          }));
+          setCardsData(formattedData);
         } else {
           console.error("Failed to fetch default profiles", response);
         }
       } catch (error) {
         console.error("An error occurred:", error);
-      }
+      } 
     };
 
     fetchDefaultProfiles();
   }, []);
-  
 
 
  

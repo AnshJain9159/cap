@@ -1,29 +1,38 @@
 const mongoose = require('mongoose');
 
-const eventSchema=mongoose.Schema({
-    Name:{
-        type:String,
+const eventSchema = mongoose.Schema({
+    Name: {
+        type: String,
         required: true,
     },
-    Mode:{
-        type:String,
-        default:"TBD"
+    Mode: {
+        type: String,
+        default: "TBD"
     },
-    Image:{
-        type:String,
-        default:"TBD"
+    Image: {
+        type: String,
+        default: "TBD"
     },
-    lastDate:{
+    lastDate: {
         type: Date,
     },
-    teamSize:{
+    teamSize: {
         type: Number,
-        default:"TBD"
+        default: 0
     },
-    URI:{
+    URI: {
         type: String,
         default: ""
     }
-})
+});
 
-module.exports=mongoose.model("eventModel",eventSchema)
+// Virtual for formatting the date without time
+eventSchema.virtual('formattedLastDate').get(function() {
+    return this.lastDate ? this.lastDate.toISOString().split('T')[0] : '';
+});
+
+// Ensure virtuals are included when the document is converted to JSON
+eventSchema.set('toJSON', { virtuals: true });
+eventSchema.set('toObject', { virtuals: true });
+
+module.exports = mongoose.model("eventModel", eventSchema);

@@ -21,9 +21,12 @@ const ContactForm = () => {
             <textarea id="message" required className="bg-transparent border-white px-3 py-2 border-2 rounded-lg flex-grow w-full h-32"></textarea>
           </div>
           <div className="flex justify-center">
+          <a href='mailto:codecap.community@gmail.com' className="mb-2">
             <Button variant={'outline'} type="submit" className="px-6 py-2 bg-white text-yellow-500 text-lg md:text-xl font-bold rounded-md hover:bg-gray-200">
               SUBMIT NOW
             </Button>
+          </a>
+            
           </div>
         </form>
       </div>

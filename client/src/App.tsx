@@ -7,10 +7,10 @@ import About from './About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import EditProfile from './components/Editprofile';
-import MainPage from './components/MainPage';
 import Hackathons from './components/Hackathons';
 import { Toaster } from './components/ui/toaster';
-import AdminPage from './components/AdminPage';
+// import AdminPage from './components/AdminPage';
+import Login from './Login';
 
 const App: React.FC = () => {
     return (
@@ -36,9 +36,9 @@ const Layout: React.FC = () => {
             {showNavbar && <Navbar />}
             <main className="flex-grow">
                 <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/Home" element={<MainPage />} />
-                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/" element={<Login/>} />
+                    <Route path="/Home" element={<Home/>} />
+                    {/* <Route path="/admin" element={<AdminPage />} /> */}
                     <Route path="/register" element={<Register />} />
                     <Route path="/buildteam" element={<FindTeamMates />} />
                     <Route path="/about" element={<About />} />

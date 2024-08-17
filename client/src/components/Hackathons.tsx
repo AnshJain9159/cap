@@ -1,36 +1,46 @@
 import { useState, useEffect } from 'react';
 import Card from './FeaturedCard';
-import { SearchIcon } from 'lucide-react';
+
+// Define an interface for the card data
+interface CardData {
+  id: string;
+  Image: string;
+  Name: string;
+  Mode: string;
+  lastDate: string;
+  teamSize: number;
+  URI: string;
+}
 
 function Hackathons() {
-  const [value, setValue] = useState('');
-  const [showOptions, setShowOptions] = useState(false);
-
-  const options = ['Venue', 'Fees', 'Team Size', 'Date', 'Name'];
-
-  const [cardsData, setCardsData] = useState([]);
-
-  const handleOptionClick = (option: any) => {
-    setValue(option);
-    setShowOptions(false);
-  };
+  const [cardsData, setCardsData] = useState<CardData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch default profiles when the component mounts
     const fetchDefaultProfiles = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch("http://localhost:3018/api/events/getAllEvents", {
           credentials: "include",
         });
         if (response.ok) {
-          const data = await response.json();
-          setCardsData(data);
-          console.log(cardsData);            
+          const data: CardData[] = await response.json();
+          const formattedData = data.map(card => ({
+            ...card,
+            lastDate: new Date(card.lastDate).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })
+          }));
+          setCardsData(formattedData);
         } else {
           console.error("Failed to fetch default profiles", response);
         }
       } catch (error) {
         console.error("An error occurred:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -38,67 +48,40 @@ function Hackathons() {
   }, []);
 
   return (
-    <div className='bg-black flex justify-center flex-col items-center min-h-screen  px-auto py-16'>
-      {/* Move the heading to the top */}
-      <div className='text-center mb-8'>
-        <h1 className='text-white font-bold text-5xl'>HACKATHON ALERTS</h1>
-        {/* <h3 className='font-semibold text-yellow-500 text-2xl'>Search Hackathons According To Your Preference</h3> */}
+    <div className='bg-black flex justify-center flex-col items-center min-h-screen px-auto py-16'>
+      <div className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4">
+            HACKATHON ALERTS
+          </h1>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            Discover upcoming hackathons and unleash your coding potential.
+          </p>
       </div>
-
-      {/* Comment out the search bar and filter */}
-      {/* 
-      <div className='w-full md:w-3/4 h-[10%] p-3'>
-        <div className='w-full h-full border-4 border-zinc-100 flex rounded-xl'>
-          <div className='h-full w-[10%] md:w-[5%] flex justify-center items-center mt-2 md:mt-4'>
-            <SearchIcon className='text-white' />
-          </div>
-          <div className='h-full w-[65%] md:w-[75%]'>
-            <input
-              type="text"
-              className='bg-transparent text-white w-full p-2 h-full focus:outline-none text-base md:text-lg lg:text-xl border-none'
-              placeholder='Enter your future teammate details/skills'
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-          </div>
-          <div className='h-full w-[25%] md:w-[20%] flex justify-center bg-white items-center'>
-            <button 
-              className='bg-white w-full text-base md:text-2xl font-semibold py-3 text-black rounded-r-xl'
-              onClick={() => setShowOptions(!showOptions)}
-            >
-              Filter
-            </button>
-          </div>
+      {
+        isLoading? (
+          <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-yellow-500"></div>
         </div>
-        {showOptions && (
-          <div className='absolute right-4 md:right-[100px] mt-2 translate-y-[-60px] text-base md:text-xl font-medium bg-white rounded-xl px-2 shadow-lg'>
-            {options.map((option, index) => (
-              <div 
-                key={index}
-                className='p-2 hover:bg-gray-200 cursor-pointer border-2 border-black rounded-xl my-2' 
-                onClick={() => handleOptionClick(option)}
-              >
-                {option}
-              </div>
+        ) : (
+          <div className="w-full md:w-3/4 px-4 md:px-0 space-y-6">
+            {cardsData.map((card) => (
+              <Card
+                key={card.id}
+                imageUrl={card.Image}
+                name={card.Name}
+                mode={card.Mode}
+                date={card.lastDate}
+                teamSize={card.teamSize}
+                hackURL={card.URI}
+              />
             ))}
           </div>
+        )
+      }
+      
+      {!isLoading && cardsData.length === 0 && (
+          <p className="text-center text-gray-400 mt-8">No hackathons available at the moment. Check back later!</p>
         )}
-      </div>
-      */}
-
-      <div className="w-full md:w-3/4 px-4 md:px-0 space-y-6">
-        {cardsData.map((card: any) => (
-          <Card 
-            key={card.id} // Ensure you have a unique key
-            imageUrl={card.Image}
-            name={card.Name}
-            mode={card.Mode}
-            date={card.lastDate}
-            teamSize={card.teamSize}
-            hackURL={card.URI} 
-          />
-        ))}
-      </div>
     </div>
   );
 }
