@@ -26,8 +26,8 @@ const Footer = () => {
             <h3 className="text-white text-lg sm:text-xl font-semibold mb-4">Contact Us</h3>
             <address className="text-sm sm:text-md font-semibold not-italic">
               <p className="mb-2">Maharaja Agrasen Institute Of Technology, Delhi-110084</p>
-              <p className="mb-2">Phone: (XXX) XXX-XXXX</p>
-              <p className="mb-2">Email: </p>
+              {/* <p className="mb-2">Phone: (XXX) XXX-XXXX</p> */}
+              <a href='mailto:codecap.community@gmail.com' className="mb-2">Email:  codecap.community@gmail.com </a>
             </address>
           </div>
           <div>
@@ -39,7 +39,7 @@ const Footer = () => {
               <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
+              <a href="https://github.com/codecapcommunity" className="text-gray-400 hover:text-white transition-colors duration-300">
                 <Github size={20} />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">

@@ -4,10 +4,20 @@ import SupportUs from './SupportUs';
 
 const teamMembers = [
   {
+    name: "Kartik Singh",
+    title: "Founder & UI/UX Designer",
+    description:
+      "I serve as the frontend developer and project manager for this initiative. My passion for technology drives my desire to create seamless user experiences. I oversee the development process and ensure that our projects are executed efficiently and effectively.",
+    image: "/ks.jpg",
+    linkedin: "https://in.linkedin.com/in/kartik-singh19",
+    github: "https://github.com/PROBOTTHACK",
+    email: "ks19092005@gmail.com",
+  },
+  {
     name: "Abhinav Gupta",
     title: "Frontend Developer & Project Manager",
     description:
-      "I serve as the frontend developer and project manager for this initiative. My passion for technology drives my desire to create seamless user experiences. I oversee the development process and ensure that our projects are executed efficiently and effectively.",
+    "I am the originator of the idea behind our platform. With the support of my capable team, I transformed this vision into reality. I designed the UI/UX of the website to ensure an intuitive and seamless user experience",
     image: "/ag.png",
     linkedin: "https://www.linkedin.com/in/abhinav-gupta-b3317128a/",
     github: "https://github.com/abhinav2805-ux",
@@ -33,16 +43,7 @@ const teamMembers = [
     github: "https://github.com/AnshJain9159",
     email: "anshjain9159@gmail.com",
   },
-  {
-    name: "Priyanshu",
-    title: "Frontend Developer",
-    description:
-      "I am a frontend developer for our platform. I specialize in creating interactive and dynamic user interfaces. My goal is to enhance the user experience through thoughtful design and development.",
-    image: "/pk.png",
-    linkedin: "https://www.linkedin.com/in/priyanshu-kumar-15ab85294/",
-    github: "https://github.com/cbum-dev",
-    email: "priyanshukumar2002234@gmail.com",
-  },
+  
 ];
 
 function AboutUs() {
@@ -72,41 +73,7 @@ function AboutUs() {
           experience and drive innovation within our college and beyond.
         </p>
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-8">MEET OUR TEAM</h2>
-        <div className="bg-gray-700 p-4 md:p-6 mb-8 rounded-xl text-center border-2 border-white">
-          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-            <img
-              className="w-32 h-32 md:w-56 md:h-56 object-cover rounded-full mb-4 md:mb-0"
-              src="ks.jpg"
-              alt="Kartik Singh"
-            />
-            <div className="text-center md:text-left">
-              <h3 className="text-2xl md:text-4xl font-bold mb-2">Kartik Singh</h3>
-              <p className="text-yellow-400 mb-2 font-semibold text-lg md:text-xl underline">
-                Founder & UI/UX Designer
-              </p>
-              <p className="text-base md:text-lg">
-                I am the originator of the idea behind our platform. With the
-                support of my capable team, I transformed this vision into
-                reality. I designed the UI/UX of the website to ensure an
-                intuitive and seamless user experience. Additionally, I created
-                and nurtured the community of Codecap, bringing together
-                passionate and talented students to collaborate and innovate
-                through hackathons.
-              </p>
-              <div className="mt-4 flex justify-center gap-4">
-                <a href="https://in.linkedin.com/in/kartik-singh19" target="_blank" rel="noopener noreferrer">
-                  <LinkedIn className="text-blue-700 text-xl hover:text-blue-900" />
-                </a>
-                <a href="https://github.com/PROBOTTHACK" target="_blank" rel="noopener noreferrer">
-                  <GitHub className="text-gray-900 text-xl hover:text-gray-600" />
-                </a>
-                <a href="mailto:ks19092005@gmail.com">
-                  <Email className="text-red-500 text-xl hover:text-red-700" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {teamMembers.map((member) => (
             <div
