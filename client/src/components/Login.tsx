@@ -1,166 +1,181 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import {logout} from '../auth/auth'
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import { Button } from '@mui/material';
 import { useToast } from './ui/use-toast';
-import { login } from '../auth/auth.ts';
+import { AvatarFallback, AvatarImage, Avatar } from './ui/avatar';
+import { useNavigate } from 'react-router-dom';
 
-interface FormState {
-  Username: string;
-  Password: string;
+interface FormData {
+  github: string;
+  avatar: string;
 }
 
-const LoginForm: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [formState, setFormState] = useState<FormState>({
-    Username: '',
-    Password: '',
-  });
-  const [errors, setErrors] = useState<Partial<FormState>>({});
-  const [message, setMessage] = useState<string>('');
-  const navigate = useNavigate();
-  
-  // Correctly destructure the toast function
+const Navbar: React.FC = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const validate = (): boolean => {
-    const errors: Partial<FormState> = {};
-    if (!formState.Username) { errors.Username = 'Username is required'; }
-    if (!formState.Password) { errors.Password = 'Password is required'; }
+  const [formData, setFormData] = useState<FormData>({
+    github: '',
+    avatar: '',
+  });
 
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+  // Default avatar URL
+  const defaultAvatarUrl = ''; // Replace with your actual default avatar URL
+
+  useEffect(() => {
+    const username = getCookieValue('user');
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/getProfile/${username}`, {
+      credentials: 'include'
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFormData({
+          github: data[0].Github,
+          avatar: data.avatar,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+      });
+  }, []);
+
+  function getCookieValue(name: string) {
+    const cookies = document.cookie.split('; ');
+    for (const cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.split('=');
+      if (cookieName === name) {
+        return decodeURIComponent(cookieValue);
+      }
+    }
+    return null;
+  }
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!validate()) { return; }
-    setIsLoading(true);
+  const closeSidebar = () => {
+    setIsOpen(false);
+  };
+
+  const handleLogout = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/signIn`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/signOut`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formState),
         credentials: 'include'
       });
-
-      if (response.ok) {
-
-        const data= await response.json();
-        if(data.token){
-          login(data.token);
-        }
-
-        setMessage('Login successful');
-        toast({
-          title: "Logged In Successfully",
-          description: message,
-        });
   
-        setTimeout(() => {
-          navigate('/Home'); // Redirect to home page
-        }, 2000);
+      if (response.ok) {
+        toast({
+          title: "LogOut Successfully",
+          description: "Logout Successful",
+        });
         
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
       } else {
-        const errorData = await response.json();
-        setMessage(`Login failed: ${errorData.msg}`);
+        console.error('Failed to sign out');
       }
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: 'Login failed: Network error',
-      });
-    }finally {
-      setIsLoading(false);
-    }
-
-    if (message) {
-      // Call the toast function correctly
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: message,
-      });
+      console.error('An error occurred during sign out:', error);
     }
   };
 
+  // Determine the avatar URL to use
+  const avatarUrl = formData.github
+    ? `https://avatars.githubusercontent.com/${formData.github}`
+    : defaultAvatarUrl;
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black p-4">
-      <div className="text-white flex flex-col md:flex-row w-full items-center justify-center gap-8 md:gap-16">
-        <img className="w-40 h-40 md:w-60 md:h-60 object-cover" src="hat.jpg" alt="Hat" />
-        <div className="flex flex-col items-center text-center md:text-left gap-6">
-          <h1 className="text-4xl md:text-7xl font-bold">
-            WELCOME <span className="text-yellow-500">BACK</span>
-          </h1>
-          <h1 className="text-3xl md:text-4xl font-bold">
-            TO <span className="text-yellow-500">CODECAP</span>
-          </h1>
+    <>
+      <nav className="bg-black text-white flex justify-between items-center p-4">
+        <div className="text-2xl font-bold text-yellow-500">
+          <img src="/logoofnavbar.jpg" className="w-[150px] md:w-[250px]" alt="LOGO" />
         </div>
-      </div>
 
-      <div className="flex flex-col w-full max-w-5xl mt-8 md:mt-16">
-        {/* Sign-in Form Section */}
-        <div className="p-6 md:p-10 bg-gray-100 rounded-md border-gray-300 relative">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-7xl font-bold">
-              LOGIN <span className="text-yellow-500">YOUR</span> ACCOUNT
-            </h1>
-          </div>
-          <form onSubmit={handleSubmit} className="flex flex-col items-center gap-6">
-            <img className="absolute bottom-4 left-4 h-12 md:h-24" src="rocket.png" alt="Rocket" />
-            <img className="absolute top-4 right-4 h-12 md:h-24" src="rocket2.png" alt="Rocket2" />
+        <div className="hidden mr-44 md:flex space-x-8">
+          <a href="/Home" className="text-yellow-500 text-2xl font-medium">HOME</a>
+          <a href="/buildteam" className="hover:text-yellow-500 text-2xl font-medium">TEAM</a>
+          <a href="/hackathons" className="hover:text-yellow-500 text-2xl font-medium">HACKATHONS</a>
+          <a href="/about" className="hover:text-yellow-500 text-2xl font-medium">ABOUT</a>
+        </div>
 
-            <div className="w-full max-w-sm md:max-w-md">
-              <div className="mb-4">
-                <input
-                  type="text"
-                  id="Username"
-                  name="Username"
-                  placeholder="Username"
-                  value={formState.Username}
-                  onChange={handleChange}
-                  className="w-full bg-gray-100 px-4 py-3 placeholder-gray-500 border-2 border-gray-700 rounded-2xl focus:outline-none focus:border-indigo-500"
-                />
-                {errors.Username && <p className="text-red-500 text-sm">{errors.Username}</p>}
+        <div className="hidden md:flex justify-end items-center w-[10%] h-full">
+          <Button
+            className="w-1/3 h-full"
+            onClick={toggleDropdown}
+          >
+            <Avatar className="w-full h-full rounded-full object-cover">
+              <AvatarImage src={avatarUrl} />
+              <AvatarFallback>P</AvatarFallback>
+            </Avatar>
+          </Button>
+
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-40 px-4 space-y-2 py-2 w-48 bg-black text-white rounded-lg shadow-lg flex-col justify-center items-center">
+              <div>
+                <a href="/edit-profile" className="text-black rounded-xl font-semibold block px-4 py-2 text-center text-lg bg-white">Edit Profile</a>
               </div>
-              <div className="mb-6">
-                <input
-                  type="password"
-                  id="Password"
-                  name="Password"
-                  placeholder="Password"
-                  value={formState.Password}
-                  onChange={handleChange}
-                  className="w-full bg-gray-100 px-4 py-3 placeholder-gray-500 border-2 border-gray-700 rounded-2xl focus:outline-none focus:border-indigo-500"
-                />
-                {errors.Password && <p className="text-red-500 text-sm">{errors.Password}</p>}
+              <div>
+                <a href="/" className="text-black rounded-xl font-semibold block px-4 py-2 text-center text-lg bg-white"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                  }}
+                >
+                  Log Out
+                </a>
               </div>
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full md:w-1/2 md:mx-auto px-4 py-3 text-white bg-black rounded-full focus:bg-indigo-600 focus:outline-none disabled:opacity-50"
-              >
-                {isLoading ? 'Logging in...' : 'Login'}
-              </button>
             </div>
-            <p className="mt-4 text-lg text-center text-gray-400">
-              Not registered? <a href="/register" className="text-blue-500 bg-white p-2 rounded-xl border border-gray-500 focus:underline">Register</a>
-            </p>
-          </form>
+          )}
+        </div>
+
+        <div className="md:hidden flex items-center">
+          <button onClick={toggleSidebar}>
+            {isOpen ? <CloseIcon className="text-yellow-500" /> : <MenuIcon className="text-yellow-500" />}
+          </button>
+        </div>
+      </nav>
+
+      <div className={`fixed top-0 left-0 w-64 h-full bg-black transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
+        <div className="flex flex-col items-center space-y-8 mt-20">
+          <a href="/Home" className="text-yellow-500 text-xl font-medium" onClick={closeSidebar}>HOME</a>
+          <a href="/buildteam" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>TEAM</a>
+          <a href="/hackathons" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>HACKATHONS</a>
+          <a href="/about" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>ABOUT</a>
+          <a href="/edit-profile" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>EDIT PROFILE</a>
+          <a
+            href="/"
+            className="text-white text-xl font-medium hover:text-yellow-500"
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogout();
+              closeSidebar();
+              logout();
+            }}
+          >
+            LOG OUT
+          </a>
         </div>
       </div>
-    </div>
+
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={closeSidebar}></div>
+      )}
+    </>
   );
 };
 
-export default LoginForm;
+export default Navbar;
