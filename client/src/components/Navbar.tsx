@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import { useToast } from './ui/use-toast';
 import { AvatarFallback, AvatarImage, Avatar } from './ui/avatar';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../auth/auth';
 
 interface FormData {
   github: string;
@@ -132,6 +133,7 @@ const Navbar: React.FC = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     handleLogout();
+                    logout();
                   }}
                 >
                   Log Out

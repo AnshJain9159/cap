@@ -8,7 +8,11 @@ export const checkUserAuthentication = (): boolean => {
     localStorage.setItem('token', token);
   };
   
+  export const signup = (token: string): void => {
+    localStorage.setItem('token', token);
+  };
+
   export const logout = (): void => {
     localStorage.removeItem('token');
-    window.location.href = '/login';
+    window.location.href = '/';
   };

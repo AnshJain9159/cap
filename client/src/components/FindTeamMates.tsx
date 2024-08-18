@@ -31,7 +31,7 @@ const FindTeamMates: React.FC = () => {
   const [customCollege, setCustomCollege] = useState("");
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [currentPage, setCurrentPage] = useState(1); // Add state for current page
-  const profilesPerPage = 5; // Define how many profiles you want per page
+  const profilesPerPage = 4; // Define how many profiles you want per page
 
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -91,7 +91,7 @@ const FindTeamMates: React.FC = () => {
   const handleSearch = async () => {
     try {
       const params = value || filterCount > 0 ? new URLSearchParams({ Text: value, ...selectedFilters }).toString() : '';
-      const url = `${process.env.VITE_BACKEND_URL}/api/user/findUsers?${params}`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/api/user/findUsers?${params}`;
       const response = await fetch(url, {
         credentials: "include",
       });
