@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '@mui/material';
@@ -28,7 +27,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const username = getCookieValue('user');
-    fetch(`http://localhost:3018/api/user/getProfile/${username}`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/getProfile/${username}`, {
       credentials: 'include'
     })
       .then((response) => response.json())
@@ -45,7 +44,7 @@ const Navbar: React.FC = () => {
 
   function getCookieValue(name: string) {
     const cookies = document.cookie.split('; ');
-    for (let cookie of cookies) {
+    for (const cookie of cookies) {
       const [cookieName, cookieValue] = cookie.split('=');
       if (cookieName === name) {
         return decodeURIComponent(cookieValue);
@@ -68,7 +67,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:3018/api/user/signOut', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/signOut`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
